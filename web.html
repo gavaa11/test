@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тестийн Шалгалт</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            text-align: center;
+        }
+        .container {
+            background: white;
+            width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+        }
+        .question {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            background: #3498db;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .options button:hover {
+            background: #2980b9;
+        }
+        .correct {
+            background: #2ecc71 !important;
+        }
+        .wrong {
+            background: #e74c3c !important;
+        }
+        .restart {
+            margin-top: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .restart:hover {
+            background: #219150;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>алдвал алий шүү</h1>
+        <p class="question"></p>
+        <div class="options"></div>
+        <p class="score"></p>
+        <button class="restart" style="display: none;" onclick="restartQuiz()">Дахин эхлэх</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Мэдлэгийн менежментийн системийн дэд системийг сонгоно уу? 1.DSS 2.EIS 3.ES 4.ERP",
+                options: ["A", "B", "C", "D"],
+                answer: "A"
+            },
+            {
+                question: "DESллийн системд орохыг сонгоно уу. 1.OSC(амбулторийн эмчилгээ) 2.EMR 3.PACS 4.ERP",
+                options: ["A", "B", "C", "D"],
+                answer: "A"
+            },
+            {
+                question: "EIS, DDS ийн зорилгийг сонгоно уу.",
+                options: ["A.Үр дүнг хянах", "B.Аюулаас сэргийлэх дохио", "C.Асуудлыг задлан шинжлэх", "D.Хувилбаруудийг танилцуулах", "E.Бүгд зөв"],
+                answer: "E.Бүгд зөв"
+            },
+            {
+                question: "Эмнэлэгийн мэдээллийн системд аль нь хамаарахгүй вэ?",
+                options: [" A.эмчилгээний мэдээллийн систем", "B.сувилагчийн систем", "C.Цаг бүртгэлийн систем", "  D.мэдлэгийн менежментийн систем"],
+                answer: "C.Цаг бүртгэлийн систем"
+            },
+            {
+                question: "Сүүлийн үед ухаалаг цаг гэх мэт өмсөж зүүж болох төхөөрөмжийг ашиглан төрөл бүрийн …… ажлууд хэрэгжиж байгаа.",
+                options: ["A. u-Health", "B. m-Health", "C. ERP", "D. PACS"],
+                answer: "B. m-Health"
+            },
+            {
+                question: "TPS meaning in system?",
+                options: ["A.Trans proccessing system", "B.Temporary Protected Status", "C.Transaction processing system", "D.Termination processing system"],
+                answer: "C.Transaction processing system"
+            },
+            {
+                question: "Мэдээллийн сувгууд аль нь буруу вэ?",
+                options: ["a.Мэдлэг", "b.Санал", "C.шийдвэр ", "D.Бүтэц"],
+                answer: "D.Бүтэц"
+            },
+            {
+                question: "m-Health-ийн хэрэглээ нэмэгдэж буй гол хүчин зүйл юу вэ?",
+                options: ["A) Харилцаа холбооны технологийн хөгжил", "B) Эрүүл мэндийн зардлын өсөлт", "C) Эмнэлгийн тоног төхөөрөмжийн хомсдол ", "D) Өвчтөний мэдээлэл авах хэрэгцээ "],                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+                answer: "A) Харилцаа холбооны технологийн хөгжил"
+            },
+            {
+                question: "PACS системийн үндсэн үүрэг юу вэ?",
+                options: ["a.Эмчийн онош тодорхойлох", "b.Дүрс оношилгооны зургийг хадгалах, дамжуулах, боловсруулах", "C.Өвчтөнүүдийн цаг авах үйлчилгээг зохицуулах", "D.Лабораторийн шинжилгээг боловсруулах "],
+                answer: "b.Дүрс оношилгооны зургийг хадгалах, дамжуулах, боловсруулах"
+            },
+            {
+                question: "Мэдлэгийн удирдлагын систем (Knowledge Management System - KMS) нь байгууллагад ямар ашиг тустай вэ?",
+                options: ["A) Зөвхөн мэдээлэл хадгалах зориулалттай", "B) Байгууллагын мэдлэгийг хуримтлуулж, ашиглаж, хуваалцахад тусална", "C) Санхүүгийн бүртгэл хөтлөх зориулалттай ", " D) Ганцхан програмчлалын мэргэжилтнүүд ашигладаг "],
+                answer: "B) Байгууллагын мэдлэгийг хуримтлуулж, ашиглаж, хуваалцахад тусална"
+            },
+            {
+                question: " Байгууллагын удирдлагын мэдээллийн систем(EIS) аль салбарт хэрэглэгддэг вэ?1.Зардлын шинжилгээний систем 2. Үр дүнгийн систем 3. Эмчийн шийдвэрийг дэмжих систем 4. Халдварт өвчинг хянах систем 5. Хэрэглэгчийн систем",
+                options: ["A","B", "C", "D", "E"],
+                answer: "C"
+            },
+            {
+                question: "Мэдээллийн системийн онолын талаарх ойлголтын үе шатыг зөв тодорхойлсон нь аль нь вэ?",
+                options: ["a.Эхлэлийн үе шат", "b.Өргөтгөх үе шат", "C. Хяналтын үе шат ", "D.Нэгтгэх үе шат ", "E.Бүгд зөв"],
+                answer: "E.Бүгд зөв"
+            },
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionElement = document.querySelector(".question");
+            const optionsElement = document.querySelector(".options");
+            const restartButton = document.querySelector(".restart");
+            const scoreElement = document.querySelector(".score");
+
+            if (currentQuestion < questions.length) {
+                questionElement.innerText = questions[currentQuestion].question;
+                optionsElement.innerHTML = "";
+                scoreElement.innerText = "";
+
+                questions[currentQuestion].options.forEach(option => {
+                    const button = document.createElement("button");
+                    button.innerText = option;
+                    button.onclick = () => checkAnswer(button, option);
+                    optionsElement.appendChild(button);
+                });
+            } else {
+                questionElement.innerText = "Шалгалт дууслаа!";
+                optionsElement.innerHTML = "";
+                scoreElement.innerText = `Таны оноо: ${score} / ${questions.length}`;
+                restartButton.style.display = "block";
+            }
+        }
+
+        function checkAnswer(button, selectedOption) {
+            const correctAnswer = questions[currentQuestion].answer;
+            if (selectedOption === correctAnswer) {
+                button.classList.add("correct");
+                score++;
+            } else {
+                button.classList.add("wrong");
+            }
+
+            setTimeout(() => {
+                currentQuestion++;
+                loadQuestion();
+            }, 1000);
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.querySelector(".restart").style.display = "none";
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+
+</body>
+</html>
